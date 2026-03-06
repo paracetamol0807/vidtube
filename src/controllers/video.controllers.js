@@ -234,7 +234,7 @@ const getVideoById = asyncHandler(async (req, res) => {
 
     // Add to the user's watch history (addToSet avoids duplicates)
     await User.findByIdAndUpdate(req.user._id, {
-        $addToSet: { watchHistory: videoId }
+        $addToSet: { watchHistory: videoId } // addToSet only adds the item if it already does not exist.
     });
 
     return res
@@ -269,7 +269,7 @@ const updateVideo = asyncHandler(async (req, res) => {
     }
 
     // Handle thumbnail update
-    let newThumbnailUrl = video.thumbnail;
+    let newThumbnailUrl = video.thumbnail;// Store the thumbnail and its publicId.
     let newThumbnailPublicId = video.thumbnailPublicId;
 
     if (req.file) {
@@ -281,7 +281,7 @@ const updateVideo = asyncHandler(async (req, res) => {
         }
 
         // Delete old thumbnail from Cloudinary using stored public_id
-        await deleteFromCloudinary(video.thumbnailPublicId);
+        await deleteFromCloudinary(video.thumbnailPublicId);// We are getting the old public Id here fro schema.
 
         newThumbnailUrl = uploadedThumbnail.url;
         newThumbnailPublicId = uploadedThumbnail.public_id;
