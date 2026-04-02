@@ -156,6 +156,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
     }
 
     return res
@@ -281,7 +282,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         throw new ApiError(401, "File is required!")
     }
     const avatar = await uploadOnCloudinary(avatarLocalPath);
-    
+
     if (!avatar.url) {
         throw new ApiError(500, "Something went wrong while loading the avatar!")
     }
