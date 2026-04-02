@@ -21,6 +21,7 @@ import WatchHistory from "./pages/WatchHistory";
 import LikedVideos from "./pages/LikedVideos";
 import EditProfile from "./pages/EditProfile";
 import Tweets from "./pages/Tweets";
+import Subscriptions from "./pages/Subscriptions";
 
 function App() {
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ function App() {
               <Route path="/liked" element={<LikedVideos />} />
               <Route path="/settings" element={<EditProfile />} />
               <Route path="/tweets" element={<Tweets />} />
+              <Route path="/subscriptions" element={<Subscriptions />} />
             </Route>
           </Routes>
         </main>

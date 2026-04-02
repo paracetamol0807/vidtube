@@ -3,7 +3,8 @@ import {
     createTweet,
     getUserTweets,
     updateTweet,
-    deleteTweet
+    deleteTweet,
+    getSubscriptionFeed
 } from "../controllers/tweet.controllers.js";
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
 
@@ -18,6 +19,9 @@ router.use(verifyJWT);
 
 router.route("/")
     .post(createTweet);             // POST /tweets — create a new tweet
+
+router.route("/feed")
+    .get(getSubscriptionFeed);      // GET  /tweets/feed — tweets from subscribed channels
 
 router.route("/user/:userId")
     .get(getUserTweets);            // GET  /tweets/user/:userId — get all tweets by a user

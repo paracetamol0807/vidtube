@@ -49,10 +49,15 @@ function VideoPlayer() {
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
   const [showPlayPulse, setShowPlayPulse] = useState(false);
+  
+  const fetchedVideoRef = useRef(null);
 
   useEffect(() => {
-    dispatch(fetchVideoById(videoId));
-    loadComments();
+    if (fetchedVideoRef.current !== videoId) {
+      dispatch(fetchVideoById(videoId));
+      loadComments();
+      fetchedVideoRef.current = videoId;
+    }
   }, [videoId, dispatch]);
 
   useEffect(() => {

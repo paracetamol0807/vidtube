@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { Home, History, ThumbsUp, PlaySquare, User, Upload, MessageCircle, Settings } from "lucide-react";
+import { Home, History, ThumbsUp, PlaySquare, User, Upload, MessageCircle, Settings, Bell } from "lucide-react";
 
 function Sidebar() {
   const sidebarOpen = useSelector((state) => state.ui.sidebarOpen);
@@ -15,6 +15,7 @@ function Sidebar() {
 
   const userLinks = isAuthenticated ? [
     { name: "Upload", icon: <Upload size={20} />, path: "/upload" },
+    { name: "Subscriptions", icon: <Bell size={20} />, path: "/subscriptions" },
     { name: "Playlists", icon: <PlaySquare size={20} />, path: "/playlists" },
     { name: "Liked Videos", icon: <ThumbsUp size={20} />, path: "/liked" },
     { name: "History", icon: <History size={20} />, path: "/history" },

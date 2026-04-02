@@ -154,9 +154,67 @@ const deleteTweet = asyncHandler(async (req, res) => {
 });
 
 
+// ─────────────────────────────────────────────
+// GET SUBSCRIPTION FEED TWEETS
+// Returns tweets from all channels the logged-in user subscribes to
+// ─────────────────────────────────────────────
+const getSubscriptionFeed = asyncHandler(async (req, res) => {
+    // 1. Find all channel IDs that the current user is subscribed to
+    const { Subscription } = await import("../models/subscription.models.js");
+
+    const subscriptions = await Subscription.find({ subscriber: req.user._id }).select("channel");
+    const channelIds = subscriptions.map((s) => s.channel);
+
+    if (channelIds.length === 0) {
+        return res
+            .status(200)
+            .json(new ApiResponse(200, [], "No subscriptions found!"));
+    }
+
+    // 2. Fetch tweets from those channels, sorted newest first
+    const tweets = await Tweet.aggregate([
+        {
+            $match: {
+                owner: { $in: channelIds }
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            fullname: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $addFields: {
+                owner: { $first: "$owner" }
+            }
+        },
+        {
+            $sort: { createdAt: -1 }
+        }
+    ]);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, tweets, "Subscription feed fetched successfully!"));
+});
+
+
 export {
     createTweet,
     getUserTweets,
     updateTweet,
-    deleteTweet
+    deleteTweet,
+    getSubscriptionFeed
 };
